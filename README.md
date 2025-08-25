@@ -1,6 +1,6 @@
 # SimpleAPI
 
-A simple FastAPI application with core and subscription functionality for Basic.
+A simple FastAPI application with core, user and job functionality for Basic.
 
 ## Features
 
@@ -94,35 +94,67 @@ The API will be available at http://localhost:8000
     -   **Headers**: `X-API-Key` (string, required)
 
 
-## Sample API Calls
+### Project Structure
 
-Here are two sample `curl` commands for interacting with the API:
-
-### 1. Add User Profile (`POST /user/add`)
-
-This command adds a new user profile. Remember to replace `your-super-secret-key` with your actual `API_KEY`.
-
-```bash
-curl -X POST \
-  http://localhost:8000/user/add \
-  -H "X-API-Key: your-super-secret-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "John Doe",
-    "email": "john.doe@example.com",
-    "skills": ["Python", "FastAPI", "Docker"]
-  }'
+```
+.
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── README.md
+├── app/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── middleware.py
+│   │   ├── routers.py
+│   │   └── services.py
+│   ├── job/
+│   │   ├── __init__.py
+│   │   ├── routers.py
+│   │   └── services.py
+│   └── user/
+│       ├── __init__.py
+│       ├── routers.py
+│       └── services.py
+├── docker-compose.yml
+├── main.py
+├── requirements.txt
+└── vercel.json
 ```
 
-### 2. Get Recommended Jobs (`GET /job/recommendation`)
+### Sample API Calls
 
-This command retrieves job recommendations for a specific user ID. Remember to replace `your-super-secret-key` with your actual `API_KEY` and `user123` with a valid user ID.
+Here are some sample `curl` commands to interact with the API endpoints:
+
+#### Add a User Profile
 
 ```bash
-curl -X GET \
-  "http://localhost:8000/job/recommendation?user_id=user123" \
-  -H "X-API-Key: your-super-secret-key"
+curl -X POST "http://localhost:8000/user/add" \
+     -H "X-API-Key: YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "user_id": "user123",
+       "name": "John Doe",
+       "email": "john.doe@example.com",
+       "skills": ["Python", "FastAPI", "Docker"]
+     }'
 ```
+
+- Replace `YOUR_API_KEY` with your actual API key.
+- Adjust the `user_id`, `name`, `email`, and `skills` as needed.
+
+#### Get Recommended Jobs
+
+```bash
+curl -X GET "http://localhost:8000/job/recommendation?user_id=user123" \
+     -H "X-API-Key: YOUR_API_KEY"
+```
+
+- Replace `YOUR_API_KEY` with your actual API key.
+- Replace `user123` with the `user_id` for whom you want job recommendations.
+
 
 ## API Documentation
 
