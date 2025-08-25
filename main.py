@@ -8,7 +8,9 @@ from sentence_transformers import SentenceTransformer
 import uuid
 
 from app.core.routers import router as core_router
-from app.subscription.routers import router as subscription_router
+
+from app.user.routers import router as user_router
+from app.job.routers import router as job_router
 
 app = FastAPI(
     title="SimpleAPI",
@@ -16,8 +18,9 @@ app = FastAPI(
     version="1.0.0",
 )
 
-app.include_router(core_router, prefix="/core", tags=["core"])
-app.include_router(subscription_router, prefix="/subscription", tags=["subscription"])
+app.include_router(core_router, prefix="/core", tags=["Core"])
+app.include_router(user_router, prefix="/user", tags=["User"])
+app.include_router(job_router, prefix="/job", tags=["Job"])
 
 # Redis configuration
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
