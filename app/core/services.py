@@ -1,6 +1,8 @@
-import platform
 import os
+import platform
+import redis
 from fastapi import HTTPException
+from app.config import redis_client
 
 class CoreService:
     def __init__(self):
@@ -10,7 +12,8 @@ class CoreService:
     async def health_check(self):
         try:
             # Simple health check implementation
-            return {"status": "healthy", "message": "Application is running correctly"}
+            redis_client.ping()
+            return {"status": "healthy", "message": "Application is running correctly", "redis_status": "connected"}
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     
@@ -24,5 +27,7 @@ class CoreService:
                 "python_version": platform.python_version(),
                 "system": platform.system()
             }
+        except redis.exceptions.ConnectionError as e:
+            raise HTTPException(status_code=500, detail=f"Redis connection failed: {e}")
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))

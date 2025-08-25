@@ -24,7 +24,12 @@ A simple FastAPI application with core and subscription functionality for Basic.
    ```
    cp .env.example .env
    ```
-   Then edit the `.env` file with your API keys, including Qdrant and Redis credentials if needed.
+- `QDRANT_HOST`: Host for Qdrant (default: `localhost`)
+- `QDRANT_PORT`: Port for Qdrant (default: `6333`)
+
+### Configuration
+
+All Redis and Qdrant configurations are now centralized in `app/config.py` for easier management and modularity.
 
 ## Running the Application
 
@@ -37,11 +42,15 @@ The API will be available at http://localhost:8000
 ## API Endpoints
 
 - `GET /` - Welcome message
-- `GET /core/health` - Health check endpoint
+- `GET /core/health` - Health check endpoint (includes Redis connection test)
 - `GET /core/info` - Application information
-- `GET /subscription/hello` - Returns a "Hello World!" message
-- `POST /insert` - Inserts a document into the vector database
-- `GET /search` - Searches for documents in the vector database
+- `POST /core/insert` - Inserts a document into the vector database.
+- `GET /core/search` - Searches for documents in the vector database.
+
+
+- `POST /job/add` - Adds a new job description to the vector database.
+- `GET /job/search` - Searches for jobs in the vector database.
+- `POST /user/add` - Adds a new user.
 
 ## API Documentation
 
