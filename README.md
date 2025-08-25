@@ -66,7 +66,7 @@ The API will be available at http://localhost:8000
 
 - `POST /job/add` - Adds a new job description to the vector database.
 - `GET /job/search` - Searches for jobs in the vector database.
-- `POST /user/add` - Adds a new user.
+- `POST /user/add`: Adds a new user. Requires `X-API-Key` header for authorization.
 
 ## API Documentation
 
