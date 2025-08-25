@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import FastAPI
 
 from app.core.routers import router as core_router
@@ -14,6 +16,10 @@ app = FastAPI(
 app.include_router(core_router, prefix="/core", tags=["Core"])
 app.include_router(user_router, prefix="/user", tags=["User"])
 app.include_router(job_router, prefix="/job", tags=["Job"])
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+logger.info("Application started")
 
 if __name__ == "__main__":
     import uvicorn
