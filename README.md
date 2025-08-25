@@ -66,7 +66,8 @@ The API will be available at http://localhost:8000
 
 - `POST /job/add` - Adds a new job description to the vector database.
 - `GET /job/search` - Searches for jobs in the vector database.
-For the `POST /user/add` endpoint, an `X-API-Key` header is required for authorization. Set the `API_KEY` environment variable to your desired secret key. For example, you can add `API_KEY=your-secret-api-key` to your `.env` file.
+- `GET /job/recommendation` - Provides job recommendations based on a user ID.
+- `POST /user/add`: Adds a new user.
 
 
 ## API Documentation

@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.job.services import JobService
+from app.job.services import JobSearchService, JobRecommendService, JobAddService
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -9,8 +9,12 @@ class Job(BaseModel):
 
 @router.post("/add")
 async def add_job(job: Job):
-    return JobService().add_job(job.description)
+    return JobAddService().add()
 
 @router.get("/search")
 async def search_job(query: str, limit: int = 3):
-    return JobService().search_job(query, limit)
+    return JobSearchService().search(query, limit)  
+
+@router.get("/recommend")
+async def recommend_job(user_id: str = Query(..., description="The ID of the user")):
+    return JobRecommendService(user_id).recommend()
