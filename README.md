@@ -64,10 +64,34 @@ The API will be available at http://localhost:8000
 - `GET /core/search` - Searches for documents in the vector database.
 
 
-- `POST /job/add` - Adds a new job description to the vector database.
-- `GET /job/search` - Searches for jobs in the vector database.
-- `GET /job/recommendation` - Provides job recommendations based on a user ID.
-- `POST /user/add`: Adds a new user.
+### Job Application APIs
+
+-   `POST /job/add`
+    -   **Method**: `POST`
+    -   **Endpoint**: `/job/add`
+    -   **Description**: Adds a new job description to the vector database.
+    -   **Request Body**: `{"description": "string"}`
+
+-   `GET /job/search`
+    -   **Method**: `GET`
+    -   **Endpoint**: `/job/search`
+    -   **Description**: Searches for jobs in the vector database based on a query.
+    -   **Query Parameters**: `query` (string, required), `limit` (integer, optional, default: 3)
+
+-   `GET /job/recommendation`
+    -   **Method**: `GET`
+    -   **Endpoint**: `/job/recommendation`
+    -   **Description**: Provides job recommendations for a given user ID.
+    -   **Query Parameters**: `user_id` (string, required)
+
+### User Application APIs
+
+-   `POST /user/add`
+    -   **Method**: `POST`
+    -   **Endpoint**: `/user/add`
+    -   **Description**: Adds a new user to the system. Requires `X-API-Key` header for authorization.
+    -   **Request Body**: (Depends on your user model, e.g., `{"username": "string", "email": "string"}`)
+    -   **Headers**: `X-API-Key` (string, required)
 
 
 ## API Documentation
