@@ -94,6 +94,36 @@ The API will be available at http://localhost:8000
     -   **Headers**: `X-API-Key` (string, required)
 
 
+## Sample API Calls
+
+Here are two sample `curl` commands for interacting with the API:
+
+### 1. Add User Profile (`POST /user/add`)
+
+This command adds a new user profile. Remember to replace `your-super-secret-key` with your actual `API_KEY`.
+
+```bash
+curl -X POST \
+  http://localhost:8000/user/add \
+  -H "X-API-Key: your-super-secret-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "skills": ["Python", "FastAPI", "Docker"]
+  }'
+```
+
+### 2. Get Recommended Jobs (`GET /job/recommendation`)
+
+This command retrieves job recommendations for a specific user ID. Remember to replace `your-super-secret-key` with your actual `API_KEY` and `user123` with a valid user ID.
+
+```bash
+curl -X GET \
+  "http://localhost:8000/job/recommendation?user_id=user123" \
+  -H "X-API-Key: your-super-secret-key"
+```
+
 ## API Documentation
 
 Once the application is running, you can access the interactive API documentation at:
