@@ -9,7 +9,8 @@ class Job(BaseModel):
 
 @router.post("/add")
 async def add_job(job: Job):
-    return JobAddService().add()
+    data = await request.json()
+    return JobAddService(data).add()
 
 @router.get("/search")
 async def search_job(query: str, limit: int = 3):

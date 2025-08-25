@@ -1,4 +1,7 @@
 class JobAddService:
+    def __init__(self, data) -> None:
+        self.data = data
+
     def add(self):
         return {"message": "Job added successfully"}
 
