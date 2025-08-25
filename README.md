@@ -33,8 +33,24 @@ All Redis and Qdrant configurations are now centralized in `app/config.py` for e
 
 ## Running the Application
 
-```
+### Locally
+To run the application, execute the `main.py` file:
+
+```bash
 python main.py
+```
+
+### Using Docker
+To build the Docker image:
+
+```bash
+docker build -t fastapi-basic .
+```
+
+To run the Docker container:
+
+```bash
+docker run -p 8000:8000 fastapi-basic
 ```
 
 The API will be available at http://localhost:8000
