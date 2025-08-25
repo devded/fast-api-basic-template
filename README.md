@@ -6,6 +6,7 @@ A simple FastAPI application with core and subscription functionality for Basic.
 
 - Core application information and health check
 - Simple and clean API structure
+- Vector database integration with Qdrant for document storage and search
 
 ## Installation
 
@@ -23,7 +24,7 @@ A simple FastAPI application with core and subscription functionality for Basic.
    ```
    cp .env.example .env
    ```
-   Then edit the `.env` file with your API keys, including BDApps subscription credentials if needed.
+   Then edit the `.env` file with your API keys, including Qdrant and Redis credentials if needed.
 
 ## Running the Application
 
@@ -39,6 +40,8 @@ The API will be available at http://localhost:8000
 - `GET /core/health` - Health check endpoint
 - `GET /core/info` - Application information
 - `GET /subscription/hello` - Returns a "Hello World!" message
+- `POST /insert` - Inserts a document into the vector database
+- `GET /search` - Searches for documents in the vector database
 
 ## API Documentation
 
