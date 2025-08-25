@@ -1,21 +1,70 @@
+import os
+import redis
 from fastapi import FastAPI
+from pydantic import BaseModel
+from qdrant_client import QdrantClient
+from qdrant_client.models import PointStruct, VectorParams
+from sentence_transformers import SentenceTransformer
+import uuid
+
 from app.core.routers import router as core_router
 from app.subscription.routers import router as subscription_router
 
-def create_application() -> FastAPI:
-    app = FastAPI(title="Basic Fast API", description="API Docs For Basic App")
-    
-    @app.get("/", tags=["root"])
-    async def read_root():
-        return {"message": "Welcome to the Basic Fast API"}
-    
-    # Register routers
-    app.include_router(core_router, prefix="/core", tags=["core"])
-    app.include_router(subscription_router, prefix="/subscription", tags=["subscription"])
-    
-    return app
+app = FastAPI(
+    title="SimpleAPI",
+    description="A simple FastAPI application with core and subscription functionality.",
+    version="1.0.0",
+)
 
-app = create_application()
+app.include_router(core_router, prefix="/core", tags=["core"])
+app.include_router(subscription_router, prefix="/subscription", tags=["subscription"])
+
+# Redis configuration
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+
+redis_client = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+
+@app.get("/redis-test")
+async def redis_test():
+    try:
+        redis_client.ping()
+        return {"message": "Redis connection successful!"}
+    except redis.exceptions.ConnectionError as e:
+        return {"message": f"Redis connection failed: {e}"}
+
+# Qdrant configuration
+QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
+QDRANT_PORT = int(os.getenv("QDRANT_PORT", 6333))
+
+qdrant = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+
+# Initialize embedding model
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+# Create collection (only once)
+collection_name = "documents"
+qdrant.recreate_collection(
+    collection_name=collection_name,
+    vectors_config=VectorParams(size=384, distance="Cosine")
+)
+
+# Input schema
+class Document(BaseModel):
+    text: str
+
+@app.post("/insert")
+def insert_document(doc: Document):
+    vector = model.encode(doc.text).tolist()
+    point = PointStruct(id=str(uuid.uuid4()), vector=vector, payload={"text": doc.text})
+    qdrant.upsert(collection_name=collection_name, points=[point])
+    return {"status": "inserted", "text": doc.text}
+
+@app.get("/search")
+def search(query: str, limit: int = 3):
+    query_vector = model.encode(query).tolist()
+    results = qdrant.search(collection_name=collection_name, query_vector=query_vector, limit=limit)
+    return [{"id": r.id, "score": r.score, "text": r.payload["text"]} for r in results]
 
 if __name__ == "__main__":
     import uvicorn

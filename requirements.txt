@@ -3,3 +3,6 @@ pydantic==2.11.5
 python-dotenv==1.1.0
 requests==2.32.3
 uvicorn==0.34.3
+redis==4.6.0
+qdrant-client==1.8.0
+sentence-transformers==2.7.0
